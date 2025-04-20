@@ -25,9 +25,6 @@ def get_data(ticker, start_date, end_date):
 # ----------------------------------------------------------
 
 
-import plotly.graph_objects as go
-import pandas as pd
-
 def plot_bollinger_bands(df: pd.DataFrame, window: int = 20, n_std: int = 2):
     # 1) Copy & compute rolling stats
     df_ = df[['Close']].copy()
@@ -38,44 +35,32 @@ def plot_bollinger_bands(df: pd.DataFrame, window: int = 20, n_std: int = 2):
 
     # 2) Build figure
     fig = go.Figure()
-
-    # Plot actual closing prices
-    fig.add_trace(go.Scatter(
-        x=df_.index, y=df_['Close'],
-        mode='lines',
-        name='Close Price',
-        line=dict(width=1, dash='dot'),
-        opacity=0.7
-    ))
-
-    # Plot SMA
     fig.add_trace(go.Scatter(
         x=df_.index, y=df_['SMA'],
-        mode='lines',
+        mode='lines+markers',
         name='Simple Moving Average',
-        line=dict(width=2)
+        line=dict(width=2),
+        marker=dict(size=6)
     ))
-
-    # Plot upper band
     fig.add_trace(go.Scatter(
         x=df_.index, y=df_['Upper'],
-        mode='lines',
+        mode='lines+markers',
         name='Upper Band',
-        line=dict(width=2)
+        line=dict(width=2),
+        marker=dict(size=6)
     ))
-
-    # Plot lower band
     fig.add_trace(go.Scatter(
         x=df_.index, y=df_['Lower'],
-        mode='lines',
+        mode='lines+markers',
         name='Lower Band',
-        line=dict(width=2)
+        line=dict(width=2),
+        marker=dict(size=6)
     ))
 
-    # 3) Tidy up layout
+    # 3) Tidy up layout to match your dark‐mode style
     fig.update_layout(
         template='plotly_dark',
-        title='Bollinger Bands with Close Price',
+        title='Stock Price Over Time, with Bollinger Bands',
         xaxis_title='Date',
         yaxis_title='Price (USD)',
         hovermode='x unified',
@@ -85,7 +70,6 @@ def plot_bollinger_bands(df: pd.DataFrame, window: int = 20, n_std: int = 2):
     fig.update_yaxes(showgrid=False)
 
     return fig
-
 
 
 # ----------------------------------------------------------
